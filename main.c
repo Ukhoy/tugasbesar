@@ -15,10 +15,10 @@
 #define true 1
 #define false 0
 
-#define easy 10
+//untuk menaikan/menurunkan tingkat kesukaran 
+#define level 15
 
-#define caption " ----------------\n// GAME PUZZLE //\n----------------\n"
-
+//untuk menentukan ukuran tabel
 #define fieldSize 4
 
 char field[fieldSize][fieldSize];
@@ -32,6 +32,7 @@ void move(int arah);
 void generateOutput();
 int cekUrut();
 
+//fungsi acak
 int acak(int i) {
     int a;
     seed += 5;
@@ -42,14 +43,20 @@ int acak(int i) {
     return(a);
 }
 
-// menentukan isi field
+//procedure menentukan isi field
 void initField(int movement) {
-    int arah, arahOld = -1, nPindah = movement, xOld, yOld;
-    int c = 1, i, j;
+    int arah;
+    int arahOld = -1;
+    int nPindah = movement;
+    int xOld;
+    int yOld;
+    int c = 1;
+    int i;
+    int j;
     char temp;
 
     srand(time(NULL));
-    seed = rand();
+    seed = rand();    
     x = y = (fieldSize - 1);
 
     for (i = 0; i <= (fieldSize - 1); i++) {
@@ -109,9 +116,10 @@ void initField(int movement) {
     }
 }
 
-// menggerakkan isi field
+//procedure menggerakan isi field
 void move(int arah) {
-    int xOld, yOld;
+    int xOld;
+    int yOld;
     char temp;
 
     xOld = x;
@@ -145,14 +153,20 @@ void move(int arah) {
     generateOutput();
 }
 
-// mendisplay setiap perpindahan
-void generateOutput() {
-    int i, j, k;
-    system("cls");
-    puts(caption);
-    puts("Tekan ESC untuk keluar / reset permainan...");
-    for(k = 1; k <= fieldSize; k++) printf("+----"); puts("+");
 
+// prosedure Menampilkan setiap perpindahan (inisial state)
+void generateOutput() {
+    int i;
+    int j;
+    int k;
+    
+    system("cls");
+    printf("==========================\n");
+    printf("|| G A M E  P U Z Z L E ||\n");
+    printf("==========================\n\n");
+    printf("Tekan ESC untuk keluar / reset permainan...\n");
+    
+    for(k = 1; k <= fieldSize; k++) printf("+----"); puts("+");
     for (i = 0; i<=(fieldSize - 1); i++) {
         for (j= 0; j<=(fieldSize - 1); j++) {
             if (i == y && j == x) {
@@ -167,8 +181,10 @@ void generateOutput() {
     }
 }
 
+//fungsi susunan akhir (goal state)
 int cekUrut() {
-    int c, d;
+    int c;
+    int d;
     int match = true;
 
     for (c = 0; c <= (fieldSize - 1); c++) {
@@ -183,90 +199,117 @@ int cekUrut() {
     return(match);
 }
 
-main() {
-    int i, j, k, level;
+
+
+int main(int argc, char *argv[])
+{
+    int i;
+    int j;
+    int k;
     char key;
-    char a;
     
-		int menu;
-        do {
-        	system("cls");
-        	puts(caption);
-        	puts("1. Play Game\n");
-        	puts("2. How To Play Game\n");
-        	puts("3. Keluar");
-        	printf("Masukkan pilihan : ");
-        	scanf("%i", &menu);
+         int menu;
+         
+         do {
+            system("cls");
+            printf("==========================\n");
+            printf("|| G A M E  P U Z Z L E ||\n");
+            printf("==========================\n");
+            printf("|| 1. Play Game         ||\n\n");
+            printf("|| 2. How To Play Game  ||\n\n");
+            printf("|| 3. Keluar            ||\n");
+            printf("==========================\n");
+            printf("Masukkan pilihan : ");
+            scanf("%i", &menu);
             
             switch(menu)
             {
-            	case 1 : 
-                initField(easy);               
-                
-				for(;;) {
-					system("cls");
-					generateOutput();
-					while ((key = getch()) != 27) {
-            			switch(key) {
-                		case keyUp :
-                    		move(atas);
-                    	break;
-                		case keyDown :
-                    		move(bawah);
-                    	break;
-                		case keyLeft :
-                    		move(kiri);
-                    break;
-                	case keyRight :
-                    	move(kanan);
-                    break;
-            		}
-            		if (cekUrut() == true) {
-                		puts("\nANDA MENANG!!!");
-                	break;
-            		}
-        		}
-        	if (key == 27) {
-            	printf("Apakah anda ingin keluar ?\n['y' utk keluar / 't' utk reset] : ");
-            	if (toupper(getchar()) == 'Y') break;
-            else continue;
-        	} else {
-            	printf("Apakah anda ingin main lagi ? [y/t] : ");
-            	if (toupper(getchar()) == 'T') {
-                	puts("\nTerima Kasih Telah Mencoba!!!");
-                	getch();
-                break;
-            	}
-            	else continue;
-        	}
-    	}
-            break;
-            	case 2 :
-        		system("cls");
-                puts("Mainkan puzzle dan menyusunnya menjadi urutan yang benar...");
-    			puts("Geser kotak kosong sehingga menjadi berurutan sbg berikut : \n");
-    			initField(0);
-    			// start tampilan prosedur
-    			for(k = 1; k <= fieldSize; k++) printf("+----"); puts("+");
-    			for (i = 0; i<=(fieldSize - 1); i++) {
-        		for (j= 0; j<=(fieldSize - 1); j++) {
-            		if (i == y && j == x) {
-                		printf("| %c  ", field2[i][j]);
-            		} else {
-                		printf("| %2i ", field2[i][j]);
-            		}
-        			}
-        		puts("|");
-
-        		for(k = 1; k <= fieldSize; k++) printf("+----"); puts("+");
-    			}
-    	// end tampilan prosedur
-    			puts("Gunakan tombol panah untuk menggeser kotak kosong...\n");
-    			puts("Tekan sembarang tombol untuk melanjutkan...");
-    			getch();
-                break;            
-        	}
-		}while ( menu !=3);
+                       case 1 :   
+                            for(;;) {  
+                            system("cls");
+                            initField(level);  
+                            // prosedure tampil perpindahan angka
+                            generateOutput();
+                            
+                            while ((key = getch()) != 27) {
+                            switch(key) {
+                                        case keyUp :
+                                             move(atas);
+                                             break;
+                                        case keyDown :
+                                             move(bawah);
+                                             break;
+                                        case keyLeft :
+                                             move(kiri);
+                                             break;
+                                        case keyRight :
+                                             move(kanan);
+                                             break;
+                                        }
+                                        if (cekUrut() == true) {
+                                                      puts("\nANDA MENANG!!!");                                                     
+                                                      break;
+                                                      }
+                            }
+                            if (key == 27) {
+                            puts("Apakah anda ingin keluar ?");
+                            printf("Tekan ['y' utk keluar / 't' utk reset] : ");
+                            getchar();
+                            if (toupper(getchar()) == 'Y') 
+                            break;
+                            else continue;
+                            
+                            } else {
+                            printf("Apakah anda ingin main lagi ? [y/t] : ");
+                            getchar();
+                            if (toupper(getchar()) == 'T') {
+                            puts("\nTerima Kasih Telah Mencoba!!!");
+                            getch();
+                            break;
+                            
+                            }
+                          }
+                        }
+                        break;
+                       
+                       case 2 :
+                            system("cls");
+                            printf("==========================\n");
+                            printf("|| G A M E  P U Z Z L E ||\n");
+                            printf("==========================\n");
+                            printf("Mainkan puzzle dan menyusunnya menjadi urutan yang benar...\n");
+                            printf("Geser kotak kosong sehingga menjadi berurutan sbg berikut : \n\n");
+                            
+                            //tampilan awal puzzle (goal state)
+                            initField(0);
+                            for(k = 1; k <= fieldSize; k++) printf("+----"); puts("+");
+                            for (i = 0; i<=(fieldSize - 1); i++) {
+                            for (j= 0; j<=(fieldSize - 1); j++) {
+                                if (i == y && j == x) {
+                                      printf("| %c  ", field2[i][j]);
+                                } else {
+                                       printf("| %2i ", field2[i][j]);
+                                }
+                            }
+                            printf("|\n");
+                            for(k = 1; k <= fieldSize; k++) printf("+----"); printf("+\n");
+                            }
+                            // end tampilan
+                            printf("Gunakan tombol panah untuk menggeser kotak kosong...\n\n");
+                            printf("Tekan sembarang tombol untuk kembali ke menu utama...\n");
+                            getch();
+                            break;
+                       
+                       case 3 :
+                            printf("Terima Kasih Sudah Bermain\n");
+                            printf("Tekan Sembarang tombol untuk keluar");
+                            getch();
+                            break;  
+                       default :
+                               printf("Menu tidak terdaftar, Ulangi!");
+                               getch();   
+    
+            }
+           }while ( menu !=3);
+return 0;
 }
-
-
