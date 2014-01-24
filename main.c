@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <windows.h>
 
 #define atas 1
 #define kiri 2
@@ -19,7 +20,7 @@
 #define level 15
 
 //untuk menentukan ukuran tabel
-#define fieldSize 4
+#define fieldSize 5
 
 char field[fieldSize][fieldSize];
 char field2[fieldSize][fieldSize];
@@ -31,6 +32,7 @@ void initField(int movement);
 void move(int arah);
 void generateOutput();
 int cekUrut();
+
 
 //fungsi acak
 int acak(int i) {
@@ -199,7 +201,17 @@ int cekUrut() {
     return(match);
 }
 
-
+//fungsi gotoxy
+void gotoxy(int x, int y)
+{
+     HANDLE hConsoleOutput;
+     COORD dwCursorPosition;
+     dwCursorPosition.X = x;
+     dwCursorPosition.Y = y;
+     hConsoleOutput = GetStdHandle (STD_OUTPUT_HANDLE);
+     SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
+     
+}
 
 int main(int argc, char *argv[])
 {
@@ -212,23 +224,23 @@ int main(int argc, char *argv[])
          
          do {
             system("cls");
-            printf("==========================\n");
-            printf("|| G A M E  P U Z Z L E ||\n");
-            printf("==========================\n");
-            printf("|| 1. Play Game         ||\n\n");
-            printf("|| 2. How To Play Game  ||\n\n");
-            printf("|| 3. Keluar            ||\n");
-            printf("==========================\n");
-            printf("Masukkan pilihan : ");
+            gotoxy(26,5); printf("==========================\n");
+            gotoxy(26,6); printf("|| G A M E  P U Z Z L E ||\n");
+            gotoxy(26,7); printf("==========================\n");
+            gotoxy(26,8); printf("|| 1. Play Game         ||\n");
+            gotoxy(26,9); printf("|| 2. How To Play Game  ||\n");
+            gotoxy(26,10); printf("|| 3. Keluar            ||\n");
+            gotoxy(26,11); printf("==========================\n");
+            gotoxy(26,12); printf("Masukkan pilihan : ");
             scanf("%i", &menu);
             
             switch(menu)
             {
                        case 1 :   
+                            //memulai permainan menyusun puzzle
                             for(;;) {  
                             system("cls");
-                            initField(level);  
-                            // prosedure tampil perpindahan angka
+                            initField(level);   
                             generateOutput();
                             
                             while ((key = getch()) != 27) {
@@ -251,6 +263,7 @@ int main(int argc, char *argv[])
                                                       break;
                                                       }
                             }
+                            //akhir permainan menyusun puzzle
                             if (key == 27) {
                             puts("Apakah anda ingin keluar ?");
                             printf("Tekan ['y' utk keluar / 't' utk reset] : ");
@@ -301,12 +314,12 @@ int main(int argc, char *argv[])
                             break;
                        
                        case 3 :
-                            printf("Terima Kasih Sudah Bermain\n");
-                            printf("Tekan Sembarang tombol untuk keluar");
+                            gotoxy(26,14); printf("Terima Kasih Sudah Bermain\n");
+                            gotoxy(22,15); printf("Tekan Sembarang tombol untuk keluar");
                             getch();
                             break;  
                        default :
-                               printf("Menu tidak terdaftar, Ulangi!");
+                               gotoxy(25,14); printf("Menu tidak terdaftar, Ulangi!");
                                getch();   
     
             }
